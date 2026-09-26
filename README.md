@@ -1,75 +1,88 @@
-# React + TypeScript + Vite
+# Чат MAX на GREEN-API
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Небольшое веб-приложение для переписки в мессенджере MAX. Вход по данным инстанса GREEN-API, создание чата по номеру телефона, отправка и получение текстовых сообщений.
 
-Currently, two official plugins are available:
+## Запуск
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Нужны Node.js и npm.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Приложение откроется на `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Сборка и просмотр собранной версии:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm run build
+npm run preview
 ```
+
+## Как пользоваться
+
+1. В [личном кабинете GREEN-API](https://console.green-api.com/) возьмите `idInstance` и `apiTokenInstance` инстанса MAX.
+2. У этого инстанса оставьте адрес вебхука пустым и включите входящие уведомления. Иначе ответы из MAX не попадут в очередь HTTP API. После сохранения настроек инстанс может перезапуститься, изменения применяются до нескольких минут.
+3. Введите `idInstance` и `apiTokenInstance` на экране входа.
+4. Плюсом в шапке списка создайте чат по номеру: `+7` или `+375`.
+5. Напишите текст и отправьте его. Ответ собеседника из MAX появится в том же диалоге.
+6. Кнопка «Выйти» внизу справа сбрасывает сессию и возвращает на экран входа.
+
+Открытый чат хранится в адресе: `/?chatId=...`.
+
+## Слои
+
+Код лежит в `src` и разделён по [Feature-Sliced Design](https://fsd.how/ru/docs/reference/layers/).
+
+| Слой       | За что отвечает                                                         |
+| ---------- | ----------------------------------------------------------------------- |
+| `app`      | Сборка страницы, роутер, обработка падения интерфейса, глобальные стили |
+| `pages`    | Страницы: основной экран и «страница не найдена»                        |
+| `widgets`  | Крупные блоки экрана: вход, список чатов, окно диалога                  |
+| `features` | Действия пользователя: вход, новый чат, отправка, получение, выход      |
+| `entities` | Данные приложения: сессия, чаты, сообщения                              |
+| `shared`   | Общее: клиент GREEN-API, кнопки, поля, маршруты                         |
+
+Точка входа — `src/main.tsx`. Она оборачивает приложение в `ErrorBoundary` и `BrowserRouter`.
+
+## Модули
+
+### app
+
+- `App` показывает либо окно входа, либо список чатов и диалог.
+- `AppRouter` открывает главную страницу на `/` и страницу 404 на остальных адресах.
+- `ErrorBoundary` при ошибке отрисовки показывает текст «что-то пошло не так» и кнопку обновления страницы.
+
+### pages
+
+- `MainPage` — экран с окном диалога.
+- `NotFoundPage` — экран для неизвестного адреса.
+
+### widgets
+
+- `login-window` — карточка входа по центру экрана.
+- `Sidebar` — шапка «Чаты», кнопка нового чата и список диалогов. После входа загружает чаты инстанса.
+- `chat-window` — шапка диалога, лента сообщений и форма отправки. Какой чат открыт, читает из `chatId` в адресе.
+
+### features
+
+- `authByGreenApi` — форма `idInstance` и `apiTokenInstance`. Проверяет инстанс методом `getStateInstance`.
+- `createChat` — окно с маской телефона. Ищет аккаунт через `checkAccount`, имя и аватар берёт из `getContactInfo`.
+- `sendMessage` — отправляет текст методом `sendMessage` и сразу пишет его в открытый чат.
+- `receiveMessages` — пока пользователь в системе, опрашивает очередь: `receiveNotification`, затем `deleteNotification`. В чат попадают только текстовые уведомления.
+- `logout` — кнопка «Выйти».
+
+### entities
+
+Три хранилища Zustand. Они же пишут данные в `localStorage`, поэтому после обновления страницы вход и переписка остаются.
+
+- `Session` — `idInstance` и `apiTokenInstance`. Пока их нет, доступен только экран входа.
+- `Chat` — список чатов: id, имя, тип, телефон, последнее сообщение, время активности и аватар. Сверху те, с кем переписка была позже.
+- `Message` — тексты по id чата. У сообщения есть id, текст, направление (`incoming` или `outgoing`) и время.
+
+### shared
+
+- `api/greenApi` — класс `GreenApi`. Собирает адрес инстанса и вызывает методы GREEN-API. React и хранилища ему не известны.
+- `ui` — кнопки, поля, текст, аватар, модальное окно, стеки.
+- `routes` — пути страниц и параметр `chatId`.

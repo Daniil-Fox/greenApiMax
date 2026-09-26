@@ -12,7 +12,7 @@ const alignMapping: Record<FlexAlign, string> = {
     'start': cls.alignStart,
     'center': cls.alignCenter,
     'end': cls.alignEnd,
-    'stretch': cls.stretch,
+    'stretch': cls.alignStretch,
 }
 
 const justifyMapping: Record<FlexJustify, string> = {

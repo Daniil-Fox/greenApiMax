@@ -1,12 +1,13 @@
 import { classNames } from "@/shared/lib/classNames";
 import cls from "./SendMessageForm.module.scss";
 import {Input, InputTheme} from "@/shared/ui/Input/Input";
-import {useState} from "react";
+import {useState, type FormEvent} from "react";
 import {Button} from "@/shared/ui/Button/Button";
 import ArrowRight from '@/shared/assets/arrow-right.svg?react'
 import {useSessionStore} from "@/entities/Session";
 import {GreenApi} from "@/shared/api/greenApi/greenApi";
 import {useMessageStore} from "@/entities/Message";
+import {useChatStore} from "@/entities/Chat";
 
 interface SendMessageFormProps {
     className?: string;
@@ -18,28 +19,32 @@ export const SendMessageForm = ({ className, chatId }: SendMessageFormProps) => 
     const [isLoading, setIsLoading] = useState(false);
 
     const credentials = useSessionStore((s) => s.credentials);
-    const addMessage = useMessageStore((s) => s.addMessage)
+    const addMessage = useMessageStore((s) => s.addMessage);
+    const upsertChat = useChatStore((s) => s.upsertChat);
 
     const handleTextChange = (value: string) => {
         setMessage(value)
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if(!credentials || !message.trim()) return
+        const text = message.trim();
+        if(!credentials || !text) return
 
         setIsLoading(true)
 
         try {
             const greenApi = new GreenApi(credentials)
-            const response = await greenApi.sendMessage(chatId, message)
+            const response = await greenApi.sendMessage(chatId, text)
 
-            addMessage({
+            addMessage(chatId, {
                 id: response.idMessage,
-                text: message,
+                text,
                 sender: 'outgoing',
                 timestamp: Date.now()
             })
+            upsertChat({ id: chatId, lastMessage: text, lastActivityAt: Date.now() })
+            setMessage('')
 
         } catch (err) {
             console.error('Ошибка при отправке сообщения:', err);

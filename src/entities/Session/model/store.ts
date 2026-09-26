@@ -5,7 +5,6 @@ import {GreenApi} from "@/shared/api/greenApi/greenApi";
 
 interface SessionState {
     credentials: Credentials | null;
-    // setCredentials: (credentials: Credentials) => void;
     logout: () => void;
     isLoading: boolean;
     error: string | null;
@@ -20,10 +19,9 @@ export const useSessionStore = create<SessionState>()(
                 isLoading: false,
                 error: null,
 
-                // setCredentials: (credentials) => set({ credentials }),
-                logout: () => set({ credentials: null }),
+                logout: () => set({ credentials: null, error: null }, false, 'session/logout'),
                 login: async (idInstance: string, apiTokenInstance: string) => {
-                    set({isLoading: true, error: null});
+                    set({isLoading: true, error: null}, false, 'session/loginStart');
                     try {
                         const greenApi = new GreenApi({idInstance, apiTokenInstance})
                         await greenApi.getStateInstance()
@@ -34,14 +32,14 @@ export const useSessionStore = create<SessionState>()(
                                 apiTokenInstance
                             },
                             isLoading: false,
-                        })
+                        }, false, 'session/loginSuccess')
 
                         return true;
                     } catch (err) {
                         set({
                             error: 'Неверный ID или Api Instances',
                             isLoading: false
-                        })
+                        }, false, 'session/loginError')
                         return false;
                     }
                 }
@@ -50,6 +48,7 @@ export const useSessionStore = create<SessionState>()(
                 name: 'green-api-session',
                 partialize: (state) => ({ credentials: state.credentials }),
             }
-        )
+        ),
+        { name: 'Session' }
     )
 );

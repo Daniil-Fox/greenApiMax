@@ -1,49 +1,42 @@
 import { classNames } from "@/shared/lib/classNames";
 import cls from "./ChatWindow.module.scss";
-import {MessagesList} from "@/entities/Message";
+import {MessagesList, useMessageStore, type Message} from "@/entities/Message";
 import {SendMessageForm} from "@/features/sendMessage";
 import {VStack} from "@/shared/ui/Stack";
 import {ChatHeader} from "./../ChatHeader/ChatHeader";
+import {useSearchParams} from "react-router-dom";
+import {chatIdSearchParam} from "@/shared/routes/config/chatParams";
+import {useChatStore} from "@/entities/Chat";
+import {Text} from "@/shared/ui";
 
 
 interface ChatWindowProps {
     className?: string;
 }
 
+const emptyMessages: Message[] = [];
+
 export const ChatWindow = ({ className }: ChatWindowProps) => {
+    const [searchParams] = useSearchParams();
+    const chatId = searchParams.get(chatIdSearchParam);
+    const messages = useMessageStore((state) => (
+        chatId ? state.messages[chatId] ?? emptyMessages : emptyMessages
+    ));
+    const chat = useChatStore((state) => state.chats.find((item) => item.id === chatId));
+
+    if (!chatId) {
+        return (
+            <VStack justify={'center'} align={'center'} className={classNames(cls.ChatWindow, {}, [className])}>
+                <Text text={'Выберите чат'}/>
+            </VStack>
+        );
+    }
+
     return (
         <VStack className={classNames(cls.ChatWindow, {}, [className])}>
-            <ChatHeader className={cls.header}/>
-            <MessagesList className={cls.messages} messages={
-                [
-                    {
-                        id: '1',
-                        text: 'Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1',
-                        sender: "incoming",
-                        timestamp: 1790422640691,
-                    },
-                    {
-                        id: '2',
-                        text: 'Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1',
-                        sender: "incoming",
-                        timestamp: 1790422640691,
-                    },
-                    {
-                        id: '3',
-                        text: 'Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1',
-                        sender: "incoming",
-                        timestamp: 1790422640691,
-                    },
-                    {
-                        id: '4',
-                        text: 'Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1',
-                        sender: "outgoing",
-                        timestamp: 1790422640691,
-                    },
-                ]
-            }
-            />
-            <SendMessageForm className={cls.sendForm} chatId={'123'}/>
+            <ChatHeader className={cls.header} name={chat?.name || chatId} avatar={chat?.avatar}/>
+            <MessagesList className={cls.messages} messages={messages}/>
+            <SendMessageForm className={cls.sendForm} chatId={chatId}/>
         </VStack>
     );
 };

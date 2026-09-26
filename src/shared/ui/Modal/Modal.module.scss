@@ -7,9 +7,19 @@
   justify-content: center;
 }
 
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.5);
+}
+
 .content {
+  position: relative;
+  z-index: 1;
   margin: auto;
   padding: 20px;
   background-color: var(--bg-secondary);
   border-radius: var(--border-radius-s);
+  color: #17181c;
+  --text-color: #17181c;
 }

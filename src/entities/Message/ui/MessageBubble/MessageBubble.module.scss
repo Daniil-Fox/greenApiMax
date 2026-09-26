@@ -1,7 +1,8 @@
 .MessageBubble {
   max-width: 70%;
-  padding: 20px;
-  border-radius: var(--border-radius-m);
+  min-width: 100px;
+  padding: var(--spacing-s);
+  border-radius: var(--border-radius-s);
   background-color: var(--primary-color);
 }
 
@@ -12,4 +13,11 @@
 
 .outgoing {
   margin-left: auto;
+}
+
+.time {
+  display: block;
+  font-size: 12px;
+  opacity: 0.7;
+  text-align: right;
 }

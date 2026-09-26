@@ -1,23 +1,43 @@
-import {create} from "zustand/react";
-import type {Message} from "./types";
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
+import type { Message } from './types';
 
 interface MessageState {
-    messages: Message[];
-    addMessage: (message: Message) => void;
+    messages: Record<string, Message[]>;
+    addMessage: (chatId: string, message: Message) => void;
     clearMessages: () => void;
 }
 
-export const useMessageStore = create<MessageState>()((set) => ({
-    messages: [],
-    addMessage: (newMessage) => {
-        set((state) => {
-            const isDuplicate = state.messages.some(message => message.id === newMessage.id);
-            if(isDuplicate) return state
+export const useMessageStore = create<MessageState>()(
+    devtools(
+        persist(
+            (set) => ({
+                messages: {},
+                addMessage: (chatId, newMessage) => {
+                    set((state) => {
+                        const currentChatMessages = state.messages[chatId] || [];
 
-            return {
-                messages: [...state.messages, newMessage],
+                        const isDuplicate = currentChatMessages.some(
+                            (message) => message.id === newMessage.id
+                        );
+
+                        if (isDuplicate) return state;
+
+                        return {
+                            messages: {
+                                ...state.messages,
+                                [chatId]: [...currentChatMessages, newMessage],
+                            },
+                        };
+                    }, false, 'messages/addMessage');
+                },
+
+                clearMessages: () => set({ messages: {} }, false, 'messages/clearMessages'),
+            }),
+            {
+                name: 'green-api-messages-history',
             }
-        })
-    },
-    clearMessages: () => set({ messages: [] }),
-}))
+        ),
+        { name: 'Message' }
+    )
+);

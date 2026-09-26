@@ -1,0 +1,29 @@
+.ChatItem {
+  display: block;
+  padding: var(--spacing-m);
+  color: inherit;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.ChatItem:hover {
+  background-color: #22242b;
+}
+
+.active,
+.active:hover {
+  background-color: #32343d;
+}
+
+.info {
+  min-width: 0;
+  flex-grow: 1;
+}
+
+.lastMessage {
+  display: -webkit-box;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.8;
+}

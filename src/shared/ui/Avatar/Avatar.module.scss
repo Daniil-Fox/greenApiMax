@@ -1,5 +1,7 @@
 .Avatar {
   display: block;
+  flex-shrink: 0;
+  overflow: hidden;
   background: #ccc;
   img {
     width: 100%;

@@ -26,10 +26,15 @@ export interface IncomingMessageData {
     };
 }
 
+export type GreenApiChatType = 'user' | 'group' | 'channel' | 'bot';
+
 export interface SenderData {
     chatId: string;
+    chatName?: string;
+    chatType?: GreenApiChatType;
     sender?: string;
     senderName?: string;
+    senderPhoneNumber?: number;
 }
 
 export interface NotificationBody {
@@ -56,4 +61,37 @@ export interface DeleteNotificationResponse {
 
 export interface GetStateInstanceResponse {
     stateInstance: 'authorized' | 'notAuthorized' | 'blocked' | 'starting';
+}
+
+export interface GreenApiChat {
+    chatId: string;
+    name: string;
+    type: GreenApiChatType;
+    phoneNumber: number;
+}
+
+export interface CheckAccountSuccess {
+    exist: boolean;
+    chatId: string;
+    fromCache: boolean;
+}
+
+export interface CheckAccountFailure {
+    status: false;
+    reason: string;
+}
+
+export type CheckAccountResponse = CheckAccountSuccess | CheckAccountFailure;
+
+export interface ContactInfo {
+    avatar?: string;
+    name?: string;
+    contactName?: string;
+    chatId: string;
+    chatType?: GreenApiChatType;
+    phoneNumber?: number;
+}
+
+export interface GetAvatarResponse {
+    urlAvatar: string;
 }
