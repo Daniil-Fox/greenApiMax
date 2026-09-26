@@ -1,7 +1,7 @@
 import { classNames } from "@/shared/lib/classNames";
 import cls from "./LoginForm.module.scss";
 import {Input} from "@/shared/ui/Input/Input";
-import {useState} from "react";
+import {useState, type FormEvent} from "react";
 import {VStack} from "@/shared/ui/Stack";
 import {Button} from "@/shared/ui/Button/Button";
 import {useSessionStore} from "@/entities/Session";
@@ -27,7 +27,7 @@ export const LoginForm = ({ className }: LoginFormProps) => {
         setApiTokenInstance(value)
     }
 
-    const handleSubmit = async (e: SubmitEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!idInstance.trim() || !apiTokenInstance.trim()) return;
         await login(idInstance, apiTokenInstance)

@@ -1,6 +1,6 @@
 import {type RouteProps} from 'react-router-dom'
 import {MainPage} from '@/pages/MainPage'
-import {NotFoundPage} from "@/pages/NotFoundPage/ui/NotFoundPage.tsx";
+import {NotFoundPage} from "@/pages/NotFoundPage/ui/NotFoundPage";
 export enum AppRoutes {
     MAIN = 'main',
     NOT_FOUND = 'not-found',
