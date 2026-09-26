@@ -1,0 +1,27 @@
+.inputWrapper {
+
+}
+.label {
+
+}
+.input {
+  display: block;
+  width: 100%;
+  height: 40px;
+  background-color: var(--input-bg);
+
+  border: none;
+  padding: 0 var(--spacing-s);
+  border-radius: var(--border-radius-s);
+  &:focus-visible {
+    outline: none;
+  }
+
+  &.input_default {
+    height: unset;
+    width: auto;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+  }
+}

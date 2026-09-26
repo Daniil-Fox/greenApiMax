@@ -1,0 +1,20 @@
+.Button {
+  padding: var(--spacing-s) var(--spacing-l);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  height: 40px;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border-radius: var(--border-radius-s);
+}
+.square {
+  width: 40px;
+  height: 40px;
+  padding: var(--spacing-s);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+

@@ -1,0 +1,14 @@
+.MessageBubble {
+  max-width: 70%;
+  padding: 20px;
+  border-radius: var(--border-radius-m);
+  background-color: var(--bubble-bg);
+}
+
+.incoming {
+  margin-right: auto;
+}
+
+.outgoing {
+  margin-left: auto;
+}

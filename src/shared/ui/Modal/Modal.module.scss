@@ -1,0 +1,15 @@
+.Modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  margin: auto;
+  padding: 20px;
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-s);
+}

@@ -1,0 +1,38 @@
+:root {
+  --bg-primary: #17181c;
+  --bg-surface: #17181c;
+  --bg-secondary: #ffffff;
+  --text-color: #fff;
+  --text-secondary: #ffffffa3;
+  --bubble-bg: #232e3a;
+  --primary-color: #1b32a1;
+
+
+  --border-radius-s: 10px;
+  --border-radius-m: 20px;
+  --border-radius-l: 40px;
+
+  --input-bg: #fff;
+
+  --spacing-xs: 4px;
+  --spacing-s: 8px;
+  --spacing-l: 16px;
+  --spacing-m: 24px;
+
+  --max-content-width: 732px;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-image: url('star_wars.svg');
+  background-size: auto 100%;
+  background-position: center;
+  background-color: var(--bg-primary);
+
+  color: var(--text-color);
+}
+.app {
+}
