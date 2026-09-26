@@ -12,7 +12,6 @@ interface LoginFormProps {
 }
 
 export const LoginForm = ({ className }: LoginFormProps) => {
-
     const [idInstance, setIdInstance] = useState<string>("");
     const [apiTokenInstance, setApiTokenInstance] = useState<string>("");
 

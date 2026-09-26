@@ -1,0 +1,16 @@
+.SendMessageForm {
+  display: flex;
+  gap: var(--spacing-m);
+  width: 100%;
+
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius-s);
+  padding: var(--spacing-s) var(--spacing-s) var(--spacing-s) var(--spacing-m);
+}
+.input {
+  flex-grow: 1;
+}
+
+.icon {
+  stroke: var(--text-color);
+}

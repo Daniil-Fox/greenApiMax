@@ -2,11 +2,12 @@
   max-width: 70%;
   padding: 20px;
   border-radius: var(--border-radius-m);
-  background-color: var(--bubble-bg);
+  background-color: var(--primary-color);
 }
 
 .incoming {
   margin-right: auto;
+  background-color: var(--bubble-bg);
 }
 
 .outgoing {

@@ -1,0 +1,18 @@
+.ChatWindow {
+  height: 100%;
+
+}
+
+.messages {
+  padding: 20px 0;
+  max-width: 700px;
+  margin: 0 auto;
+  flex-grow: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.sendForm {
+  max-width: 700px;
+  margin: 0 auto 20px;
+}

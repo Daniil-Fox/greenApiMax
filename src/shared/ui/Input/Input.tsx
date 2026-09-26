@@ -2,7 +2,7 @@ import { classNames } from "@/shared/lib/classNames";
 import cls from "./Input.module.scss";
 import type {ChangeEvent} from "react";
 
-enum InputTheme {
+export enum InputTheme {
     DEFAULT = 'input_default',
     LIGHT = 'input_light',
 }
@@ -27,14 +27,14 @@ export const Input = (props: InputProps) => {
 
     if(theme === InputTheme.DEFAULT){
         return (
-            <input name={name} disabled={disabled} placeholder={placeholder} value={value} className={classNames(cls.input, {[cls.disabled]: disabled}, [cls.theme])} onChange={handleChange}/>
+            <input name={name} disabled={disabled} placeholder={placeholder} value={value} className={classNames(cls.input, {[cls.disabled]: disabled}, [className, cls[theme]])} onChange={handleChange}/>
         )
     }
 
     return (
         <div className={classNames(cls.inputWrapper, {}, [className])}>
             {label && <span className={cls.label}>{label}</span>}
-            <input name={name} disabled={disabled} placeholder={placeholder} value={value} className={classNames(cls.input, {[cls.disabled]: disabled}, [cls.theme])} onChange={handleChange}/>
+            <input name={name} disabled={disabled} placeholder={placeholder} value={value} className={classNames(cls.input, {[cls.disabled]: disabled}, [cls[theme]])} onChange={handleChange}/>
         </div>
     );
 };

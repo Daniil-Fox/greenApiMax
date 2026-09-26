@@ -1,0 +1,16 @@
+.ChatHeader {
+  padding: var(--spacing-m);
+  background: var(--bg-primary);
+}
+.back {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  flex-shrink: 0;
+}
+.icon {
+  transform: rotateZ(180deg);
+  stroke: var(--text-color);
+}

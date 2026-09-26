@@ -4,7 +4,7 @@ import {classNames} from "@/shared/lib/classNames";
 import {LoginWindow} from "@/widgets/login-window/ui/LoginWindow";
 import {useSessionStore} from "@/entities/Session";
 import {HStack, VStack} from "@/shared/ui/Stack";
-import {MessagesList} from "@/entities/Message";
+import {ChatWindow} from "@/widgets/chat-window";
 
 interface MainPageProps {
     className?: string;
@@ -25,35 +25,7 @@ export const MainPage = ({ className }: MainPageProps) => {
 
     return (
         <div className={classNames(cls.MainPage, {}, [className])}>
-            <MessagesList messages={
-                [
-                    {
-                        id: '1',
-                        text: 'Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1',
-                        sender: "incoming",
-                        timestamp: 1790422640691,
-                    },
-                    {
-                        id: '2',
-                        text: 'Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1',
-                        sender: "incoming",
-                        timestamp: 1790422640691,
-                    },
-                    {
-                        id: '3',
-                        text: 'Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1',
-                        sender: "incoming",
-                        timestamp: 1790422640691,
-                    },
-                    {
-                        id: '4',
-                        text: 'Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1Text of message 1',
-                        sender: "outgoing",
-                        timestamp: 1790422640691,
-                    },
-                ]
-            }/>
-
+            <ChatWindow/>
         </div>
     );
 };
