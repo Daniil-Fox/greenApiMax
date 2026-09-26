@@ -69,12 +69,10 @@ export const CreateChat = ({ className }: CreateChatProps) => {
             }
 
             let name = phone;
-            let avatar: string | undefined;
 
             try {
                 const contact = await api.getContactInfo(result.chatId);
                 name = contact.name || contact.contactName || phone;
-                avatar = contact.avatar || undefined;
             } catch (contactError) {
                 console.error('Не удалось получить имя контакта:', contactError);
             }
@@ -84,7 +82,6 @@ export const CreateChat = ({ className }: CreateChatProps) => {
                 name,
                 type: 'user',
                 phoneNumber,
-                avatar,
             });
             navigate(getChatLocation(result.chatId));
             close();

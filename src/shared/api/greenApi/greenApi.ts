@@ -2,7 +2,6 @@ import axios from "axios";
 import type {
     CheckAccountResponse,
     ContactInfo,
-    GetAvatarResponse,
     DeleteNotificationResponse,
     GetStateInstanceResponse, GreenApiChat,
     GreenApiCredentials, ReceiveNotificationResponse,
@@ -125,15 +124,6 @@ export class GreenApi {
         );
 
         return response.data;
-    }
-
-    async getAvatar(chatId: string): Promise<string> {
-        const response = await axios.post<GetAvatarResponse>(
-            `${this.baseUrl}/getAvatar/${this.token}`,
-            { chatId }
-        );
-
-        return response.data.urlAvatar ?? '';
     }
 
     async getChats(): Promise<GreenApiChat[]> {

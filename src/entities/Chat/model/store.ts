@@ -25,7 +25,6 @@ const toChat = (serverChat: GreenApiChat, existing?: Chat): Chat => ({
     phoneNumber: serverChat.phoneNumber ?? existing?.phoneNumber ?? 0,
     lastMessage: existing?.lastMessage,
     lastActivityAt: existing?.lastActivityAt,
-    avatar: existing?.avatar,
 });
 
 const mergeChat = (current: Chat, patch: UpsertChatInput): Chat => ({
@@ -35,10 +34,8 @@ const mergeChat = (current: Chat, patch: UpsertChatInput): Chat => ({
     phoneNumber: patch.phoneNumber ?? current.phoneNumber,
     lastMessage: patch.lastMessage ?? current.lastMessage,
     lastActivityAt: patch.lastActivityAt ?? (patch.lastMessage ? Date.now() : current.lastActivityAt),
-    avatar: patch.avatar || current.avatar,
 });
 
-const avatarRequests = new Set<string>();
 let pendingChatsFetch: Promise<void> | null = null;
 let lastChatsFetchAt = 0;
 
@@ -49,51 +46,6 @@ const isRateLimitError = (error: unknown): boolean => {
         && error !== null
         && 'response' in error
         && (error as { response?: { status?: number } }).response?.status === 429;
-};
-
-const loadMissingAvatars = async (
-    api: GreenApi,
-    get: () => ChatStore,
-    set: (
-        partial: Partial<ChatStore> | ((state: ChatStore) => Partial<ChatStore>),
-        replace?: false,
-        action?: string,
-    ) => void,
-) => {
-    const missing = get().chats.filter((chat) => chat.avatar === undefined && !avatarRequests.has(chat.id));
-
-    const applyAvatar = (chatId: string, urlAvatar: string) => {
-        set((state) => ({
-            chats: state.chats.map((item) =>
-                item.id === chatId ? { ...item, avatar: urlAvatar } : item
-            ),
-        }), false, 'chats/setAvatar');
-    };
-
-    for (const chat of missing) {
-        avatarRequests.add(chat.id);
-
-        try {
-            applyAvatar(chat.id, await api.getAvatar(chat.id));
-            await delay(150);
-        } catch (error) {
-            if (!isRateLimitError(error)) {
-                avatarRequests.delete(chat.id);
-                console.error('Не удалось загрузить аватар:', error);
-                break;
-            }
-
-            await delay(1100);
-
-            try {
-                applyAvatar(chat.id, await api.getAvatar(chat.id));
-            } catch (retryError) {
-                avatarRequests.delete(chat.id);
-                console.error('Не удалось загрузить аватар:', retryError);
-                break;
-            }
-        }
-    }
 };
 
 export const useChatStore = create<ChatStore>()(
@@ -124,7 +76,6 @@ export const useChatStore = create<ChatStore>()(
                         phoneNumber: patch.phoneNumber ?? 0,
                         lastMessage: patch.lastMessage,
                         lastActivityAt: patch.lastActivityAt,
-                        avatar: patch.avatar,
                     };
 
                     set({ chats: sortChats([newChat, ...chats]) }, false, 'chats/upsertChat');
@@ -162,7 +113,6 @@ export const useChatStore = create<ChatStore>()(
                             const localOnly = Array.from(localById.values());
 
                             set({ chats: sortChats([...merged, ...localOnly]), isLoading: false }, false, 'chats/fetchSuccess');
-                            void loadMissingAvatars(api, get, set);
                         } catch (err) {
                             console.error('Ошибка при загрузке чатов:', err);
                             set({

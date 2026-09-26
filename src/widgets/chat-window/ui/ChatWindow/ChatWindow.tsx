@@ -34,7 +34,7 @@ export const ChatWindow = ({ className }: ChatWindowProps) => {
 
     return (
         <VStack className={classNames(cls.ChatWindow, {}, [className])}>
-            <ChatHeader className={cls.header} name={chat?.name || chatId} avatar={chat?.avatar}/>
+            <ChatHeader className={cls.header} name={chat?.name || chatId}/>
             <MessagesList className={cls.messages} messages={messages}/>
             <SendMessageForm className={cls.sendForm} chatId={chatId}/>
         </VStack>

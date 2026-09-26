@@ -84,14 +84,9 @@ export interface CheckAccountFailure {
 export type CheckAccountResponse = CheckAccountSuccess | CheckAccountFailure;
 
 export interface ContactInfo {
-    avatar?: string;
     name?: string;
     contactName?: string;
     chatId: string;
     chatType?: GreenApiChatType;
     phoneNumber?: number;
-}
-
-export interface GetAvatarResponse {
-    urlAvatar: string;
 }

@@ -23,7 +23,7 @@ export const ChatItem = (props: ChatItemProps) => {
             aria-current={isActive ? 'page' : false}
         >
             <HStack gap={'16'} align={'center'}>
-                <Avatar size={48} src={chat.avatar || undefined}/>
+                <Avatar size={48}/>
                 <VStack gap={'4'} className={cls.info}>
                     <Text text={chat.name}/>
                     {chat.lastMessage && <Text text={chat.lastMessage} className={cls.lastMessage}/>}

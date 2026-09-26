@@ -7,7 +7,6 @@ export interface Chat {
     phoneNumber: number;
     lastMessage?: string;
     lastActivityAt?: number;
-    avatar?: string;
 }
 
 export interface UpsertChatInput {
@@ -17,5 +16,4 @@ export interface UpsertChatInput {
     phoneNumber?: number;
     lastMessage?: string;
     lastActivityAt?: number;
-    avatar?: string;
 }

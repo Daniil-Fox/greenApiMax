@@ -10,10 +10,9 @@ import ArrowRight from '@/shared/assets/arrow-right.svg?react'
 interface ChatHeaderProps {
     className?: string;
     name: string;
-    avatar?: string;
 }
 
-export const ChatHeader = ({ className, name, avatar }: ChatHeaderProps) => {
+export const ChatHeader = ({ className, name }: ChatHeaderProps) => {
     const navigate = useNavigate();
 
     const handleClickBack = () => {
@@ -27,7 +26,7 @@ export const ChatHeader = ({ className, name, avatar }: ChatHeaderProps) => {
                     <ArrowRight className={cls.icon}/>
                 </Button>
                 <HStack gap={'8'} align={'center'}>
-                    <Avatar size={40} src={avatar}/>
+                    <Avatar size={40}/>
                     <VStack gap={'4'}>
                         <Text text={name}/>
                     </VStack>
